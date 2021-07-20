@@ -1,64 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
+using UnityEngine.Networking;
 using UnityEngine.UI;
-//using TMPro;
 
-public class LoginManager : MonoBehaviourPunCallbacks
+public class LoginManager : MonoBehaviour
 {
-    //public TMP_InputField PlayerName_InputField;
-    public InputField PlayerName_InputField;
-
-    #region UNITY Methods
-
+    public InputField inputUser;
+    public InputField inputPassword;
+    // Start is called before the first frame update
     void Start()
     {
-        //PhotonNetwork.ConnectUsingSettings();
+        
     }
 
+    // Update is called once per frame
     void Update()
     {
+        
     }
 
-    #endregion
-
-    #region UI Callback Methods
-
-    public void ConnectAnonymously()
+    public void guardarCuenta()
     {
-        PhotonNetwork.GameVersion = "0.1";
-        PhotonNetwork.ConnectUsingSettings();
-        Debug.Log("Se va a conectar al servidor master");
+        Cuenta cuenta = new Cuenta();
+        cuenta.nickname = "JoseMV";
+        cuenta.nombres = "Piero Jose";
+        cuenta.password = "cloud";
+        cuenta.telefono = "987456123";
+        cuenta.tipoCuenta = 0;
+        cuenta.apellidos = "Moreno Vásquez";
+        cuenta.domicilio = "Barcelona";
+        cuenta.email = "piero.jmv.2001@gmail.com";
+
+        string json = JsonUtility.ToJson(cuenta);
+
+        StartCoroutine(IE_guardarCuenta(json));
+
+        //WWWForm form = new WWWForm();
+        //form.AddField("cuenta", json);
+
+        //UnityWebRequest www = UnityWebRequest.Post("http://localhost/3dcloud/controllers/cuenta/guardarCuenta.php", form);
+
+        //cuenta = JsonUtility.FromJson<Cuenta>(json);
+
+        //UnityWebRequest www = UnityWebRequest.Post(url, formData);
+
+        //www.chunkedTransfer = false;////ADD THIS LINE
+
+        //yield return www.SendWebRequest();
     }
 
-    public void ConnectToPhotonServer()
+    IEnumerator IE_guardarCuenta(string cuenta)
     {
+        WWWForm form = new WWWForm();
+        form.AddField("cuenta", cuenta);
 
-        PhotonNetwork.NickName = "Leonidas";
-        PhotonNetwork.ConnectUsingSettings();
+        UnityWebRequest www = UnityWebRequest.Post("http://localhost/3dcloud/controllers/cuenta/guardarCuenta.php", form);
+        yield return www.SendWebRequest();
+
+        if (!www.isNetworkError && !www.isHttpError)
+        {
+            // Get text content like this:
+            Debug.Log(www.downloadHandler.text);
+        }
 
     }
-    #endregion
 
-    #region Photon Callback Methods
-    public override void OnConnected()
-    {
-        Debug.Log("Se ha llamado al servidor");
-    }
-
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.AutomaticallySyncScene = true;
-        Debug.Log("Se ha conectado al servidor master");
-        PhotonNetwork.LoadLevel("Home");
-    }
-
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        Debug.Log("Problema al conectar al servidor");
-    }
-
-    #endregion
 }
