@@ -8,17 +8,30 @@ public class LoginManager : MonoBehaviour
 {
     public InputField inputUser;
     public InputField inputPassword;
-    // Start is called before the first frame update
+
+    public static LoginManager sharedInstance;
+    public Cuenta cuenta;
+
+    #region UNITY Methods
+
+    private void Awake()
+    {
+        sharedInstance = this;
+    }
+    
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
+
+    #endregion
+
+    #region UI Callback Methods
 
     public void guardarCuenta()
     {
@@ -33,37 +46,80 @@ public class LoginManager : MonoBehaviour
         cuenta.email = "piero.jmv.2001@gmail.com";
 
         string json = JsonUtility.ToJson(cuenta);
-
         StartCoroutine(IE_guardarCuenta(json));
-
-        //WWWForm form = new WWWForm();
-        //form.AddField("cuenta", json);
-
-        //UnityWebRequest www = UnityWebRequest.Post("http://localhost/3dcloud/controllers/cuenta/guardarCuenta.php", form);
-
-        //cuenta = JsonUtility.FromJson<Cuenta>(json);
-
-        //UnityWebRequest www = UnityWebRequest.Post(url, formData);
-
-        //www.chunkedTransfer = false;////ADD THIS LINE
-
-        //yield return www.SendWebRequest();
     }
 
-    IEnumerator IE_guardarCuenta(string cuenta)
+    public void obtenerCuenta()
+    {
+        StartCoroutine(IE_obtenerCuenta());
+    }
+
+    #endregion
+
+    #region IEnumerator Callback Methods
+
+    IEnumerator IE_guardarCuenta(string jsonCuenta)
     {
         WWWForm form = new WWWForm();
-        form.AddField("cuenta", cuenta);
+        form.AddField("cuenta", jsonCuenta);
 
         UnityWebRequest www = UnityWebRequest.Post("http://localhost/3dcloud/controllers/cuenta/guardarCuenta.php", form);
         yield return www.SendWebRequest();
 
-        if (!www.isNetworkError && !www.isHttpError)
+        string res = debugNetwork(www);
+        if (res != "Error")
         {
-            // Get text content like this:
-            Debug.Log(www.downloadHandler.text);
+            Debug.Log(res);
         }
-
     }
+
+    public IEnumerator IE_obtenerCuenta()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("email", inputUser.text);
+        form.AddField("password", inputPassword.text);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://localhost/3dcloud/controllers/cuenta/obtenerCuentaPorEmailAndPassword.php", form);
+        yield return www.SendWebRequest();
+
+        string res = debugNetwork(www);
+        
+        if (res != "Error")
+        {
+            this.cuenta = JsonUtility.FromJson<Cuenta>(res);
+            if (this.cuenta.idCuenta > 0)
+            {
+                if (this.cuenta.tipoCuenta == 0)
+                {
+                    GameManager.sharedInstance.SetGameState(GameState.lobbyDocente);
+                    LobbyDocenteManager.sharedInstance.SetNombreDocente();
+                }
+                else if (this.cuenta.tipoCuenta == 1)
+                {
+                    GameManager.sharedInstance.SetGameState(GameState.lobbyEstudiante);
+                    LobbyEstudianteManager.sharedInstance.SetNombreEstudiante();
+                }
+            }
+            else
+            {
+                inputPassword.text = "";
+            }
+            
+        }
+    }
+
+    private string debugNetwork(UnityWebRequest www)
+    {
+        if (!www.isNetworkError && !www.isHttpError)
+            return www.downloadHandler.text;
+        return "Error";
+    }
+
+    #endregion
+
+    #region Photon Callback Methods
+
+
+    #endregion
 
 }

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 
-public class Cuenta
+public class Cuenta 
 {
     public int idCuenta;
     public string nickname;
@@ -15,5 +13,10 @@ public class Cuenta
     public string fechaRegistro;
     public string fechaModificacion;
     public int activo;
+
+    public Cuenta()
+    {
+
+    }
 
 }
