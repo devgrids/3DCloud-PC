@@ -9,6 +9,8 @@ public class LobbyEstudianteManager : MonoBehaviour
 
     [SerializeField] Text textNombreEstudiante;
 
+    #region UNITY Methods
+
     private void Awake()
     {
         sharedInstance = this;
@@ -16,17 +18,38 @@ public class LobbyEstudianteManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        
+
     }
+    #endregion
+
+    #region UI Callback Methods
 
     public void SetNombreEstudiante()
     {
-        textNombreEstudiante.text = LoginManager.sharedInstance.cuenta.nombres + " " + LoginManager.sharedInstance.cuenta.apellidos;
+        textNombreEstudiante.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
         //Debug.Log(LoginManager.sharedInstance.cuenta.nombres);
     }
+
+    #endregion
+
+    #region IEnumerator Callback Methods
+
+
+
+
+
+    #endregion
+
+    #region Photon Callback Methods
+
+
+    #endregion
+
+
+
 }
