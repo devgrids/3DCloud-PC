@@ -13,6 +13,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private Transform contenedorRoom; // contenedor para las salas disponibles
     public GameObject prefabRoomList; //Prefab para mostrar cada sala en el lobby
 
+    public List<Sprite> imageList;
+    public static int indexImagen = 0;
+
     #region UNITY Methods
     private void Awake()
     {
@@ -28,6 +31,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // Esto indica que todos los jugadores de la sala usarán la misma el jugador master (el que crea la sala) o Master Client
         PhotonNetwork.AutomaticallySyncScene = true;
         roomLista = new List<RoomInfo>();
+        Debug.Log("Conectando master");
     }
 
     public override void OnCreatedRoom()
@@ -48,6 +52,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // Loop por cada sala en la lista de salas
         foreach (RoomInfo room in roomList)
         {
+            Debug.Log("Nombre: " + room.Name);
             /*
             if (salasenLista != null)
             {
@@ -74,6 +79,31 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             //ListRoom(room);
             //}
         }
+    }
+
+    //public override void OnJoinedRoom()
+    //{
+    //    PhotonNetwork.LeaveLobby();
+    //    // 4
+    //    Debug.Log("Te uniste a la Sala: " + PhotonNetwork.CurrentRoom.Name);
+    //    Debug.Log("La sala cuenta con: " + PhotonNetwork.CurrentRoom.PlayerCount + " jugador(es).");
+    //}
+
+    // Si no se puede unir a la sala al azar
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("Error en Join Random Falider");
+       
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("Error en unirse a ROOM");
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("Lobby conectado");
     }
 
     #endregion
@@ -110,9 +140,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
     }
 
-    
-
     #endregion
-
 
 }

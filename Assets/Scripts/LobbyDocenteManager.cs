@@ -41,23 +41,11 @@ public class LobbyDocenteManager : MonoBehaviourPunCallbacks
         textNombreDocente.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
     }
 
-    public void CreateRoom()
-    {
-        Debug.Log("Creando nueva sala: " + inputNombreRoom.text);
-        RoomOptions roomOptions = new RoomOptions()
-        {
-            IsVisible = true,
-            IsOpen = true,
-            MaxPlayers = byte.Parse(inputCapacidadRoom.text)
-        };
-        PhotonNetwork.CreateRoom(inputNombreRoom.text, roomOptions); // Creación de una nueva sala
-    }
-
-    public void addListaGUI()
+    public void ContenedorListaCursos()
     {
         GameObject card = Instantiate(LobbyManager.sharedInstance.prefabRoomList, contenedorRoom);
         RoomSelect scriptRoomSelect = card.GetComponent<RoomSelect>();
-        scriptRoomSelect.SetRoom(inputNombreRoom.text, int.Parse(inputCapacidadRoom.text), 1);
+        scriptRoomSelect.SetRoom(inputNombreRoom.text, int.Parse(inputCapacidadRoom.text), 1, LobbyManager.indexImagen);
         //GameObject tempListing = Instantiate(prefabRoomList, contenedorRoom);
         //RoomSelect tempButton = tempListing.GetComponent<RoomSelect>();
         //int capacidad = int.Parse(maxSala.text);
@@ -74,9 +62,5 @@ public class LobbyDocenteManager : MonoBehaviourPunCallbacks
 
 
     #endregion
-
-
-
-
 
 }
