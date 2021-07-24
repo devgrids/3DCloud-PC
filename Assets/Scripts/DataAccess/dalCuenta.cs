@@ -12,6 +12,8 @@ public class dalCuenta : MonoBehaviour
     public InputField inputUser;
     public InputField inputPassword;
 
+    public static bool isDocente;
+
     #region UNITY Methods
 
     private void Awake()
@@ -92,13 +94,19 @@ public class dalCuenta : MonoBehaviour
                 if (this.cuenta.tipoCuenta == 0)
                 {
                     GameManager.sharedInstance.SetGameState(GameState.lobbyDocente);
-                    LobbyDocenteManager.sharedInstance.SetNombreDocente();
+                    LobbyManager.sharedInstance.SetNombreDocente();
                 }
                 else if (this.cuenta.tipoCuenta == 1)
                 {
                     GameManager.sharedInstance.SetGameState(GameState.lobbyEstudiante);
-                    LobbyEstudianteManager.sharedInstance.SetNombreEstudiante();
+                    LobbyManager.sharedInstance.SetNombreEstudiante();
                 }
+                isDocente = this.cuenta.tipoCuenta == 0;
+                LobbyManager.sharedInstance.AddContenedorListaCurso("Home", 5, 0);
+                LobbyManager.sharedInstance.AddContenedorListaCurso("Aula 1", 15, 1);
+                LobbyManager.sharedInstance.AddContenedorListaCurso("Aula 2", 10, 2);
+                LobbyManager.sharedInstance.AddContenedorListaCurso("Biblioteca", 20, 3);
+                LobbyManager.sharedInstance.AddContenedorListaCurso("Comedor", 12, 4);
             }
         }
     }

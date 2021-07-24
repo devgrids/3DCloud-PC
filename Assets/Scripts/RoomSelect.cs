@@ -22,9 +22,13 @@ public class RoomSelect : MonoBehaviourPunCallbacks
     // Método enlazado con el botón que une al jugador a una sala
     public void JoinRoomOnClick()
     {
-        //PhotonNetwork.JoinRoom(roomName);
-        CreateRoom();
-        //StartGameOnClick();
+
+        LobbyManager.roomNameContenedor = roomName;
+        LobbyManager.roomSizeContenedor = roomSize;
+        LobbyManager.playerCountContenedor = playerCount;
+        LobbyManager.indexImagenContenedor = indexImagen;
+
+        LobbyManager.sharedInstance.CreateRoom();
 
         Debug.Log("ROOM NAME: " + roomName);
         Debug.Log("ROOM SIZE: " + roomSize);
@@ -44,38 +48,6 @@ public class RoomSelect : MonoBehaviourPunCallbacks
         imagen.sprite = LobbyManager.sharedInstance.imageList[indexImagen];
     }
 
-    public void StartGameOnClick()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            //PhotonNetwork.CurrentRoom.IsOpen = false;
-            // Como se ha puesto la sincronización automática de escenas, el master 
-            // notifica automáticamente a los demás jugadores antes de carga la escena
-            PhotonNetwork.LoadLevel(indexImagen + 1);
-            Debug.Log("Eres cliente master");
-        }
-    }
+    
 
-    public void CreateRoom()
-    {
-        Debug.Log("Creando nueva sala: " + roomName);
-        RoomOptions roomOptions = new RoomOptions()
-        {
-            IsVisible = true,
-            IsOpen = true,
-            MaxPlayers = byte.Parse(roomSize.ToString())
-        };
-        PhotonNetwork.CreateRoom(roomName, roomOptions); // Creación de una nueva sala
-    }
-
-    public override void OnJoinedRoom()
-    {
-        //PhotonNetwork.LeaveLobby();
-        // 4
-        Debug.Log("Te uniste a la Sala: " + PhotonNetwork.CurrentRoom.Name);
-        Debug.Log("La sala cuenta con: " + PhotonNetwork.CurrentRoom.PlayerCount + " jugador(es).");
-        //PhotonNetwork.LoadLevel(this.indexImagen + 1);
-        StartGameOnClick();
-
-    }
 }

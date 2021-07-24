@@ -4,22 +4,41 @@ using UnityEngine;
 
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public static LobbyManager sharedInstance;
 
+    [SerializeField] Text textNombreDocente;
+    [SerializeField] Text textNombreEstudiante;
+
+    [SerializeField] Transform contenedorRoomDocente;
+    [SerializeField] Transform contenedorRoomEstudiante;
+
     private List<RoomInfo> roomLista;
-    private Transform contenedorRoom; // contenedor para las salas disponibles
-    public GameObject prefabRoomList; //Prefab para mostrar cada sala en el lobby
+    public GameObject prefabRoomList;
+
+    [SerializeField] InputField inputNombreRoom;
+    [SerializeField] InputField inputCapacidadRoom;
 
     public List<Sprite> imageList;
     public static int indexImagen = 0;
+
+    public static string roomNameContenedor;
+    public static int roomSizeContenedor;
+    public static int playerCountContenedor;
+    public static int indexImagenContenedor;
 
     #region UNITY Methods
     private void Awake()
     {
         sharedInstance = this;
+    }
+
+    private void Start()
+    {
+        
     }
     #endregion
 
@@ -38,57 +57,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Curso creado correctamente");
     }
-
-    public override void OnCreateRoomFailed(short returnCode, string message) //si la sala existe
-    {
-        Debug.Log("Fallo en crear una nueva sala, seguramente ya existe una sala con ese nombre.");
-    }
-
-    // Cada vez que se actualiza la lista de salas se llama a este método con la lista de salas
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        //BorrarSalasdeLista();
-        // int tempIndex;
-        // Loop por cada sala en la lista de salas
-        foreach (RoomInfo room in roomList)
-        {
-            Debug.Log("Nombre: " + room.Name);
-            /*
-            if (salasenLista != null)
-            {
-                //Busca el índice de la sala en la lista de salas
-                tempIndex = salasenLista.FindIndex(ByName(room.Name)); 
-            }
-            else
-            {
-                tempIndex = -1;
-            }
-            // Quitar de la lista porque ha sido cerrada la sala
-            // Si no quedan jugadores en sala se borra la sala
-            
-            if (tempIndex != -1) 
-            {
-                salasenLista.RemoveAt(tempIndex);
-                Destroy(contenedordeSalas.GetChild(tempIndex).gameObject);
-            }
-            */
-            // Agregar lista de salas porque ya tiene un jugador
-            //if (room.PlayerCount > 0) 
-            //{
-            roomLista.Add(room);
-            //ListRoom(room);
-            //}
-        }
-    }
-
-    //public override void OnJoinedRoom()
-    //{
-    //    PhotonNetwork.LeaveLobby();
-    //    // 4
-    //    Debug.Log("Te uniste a la Sala: " + PhotonNetwork.CurrentRoom.Name);
-    //    Debug.Log("La sala cuenta con: " + PhotonNetwork.CurrentRoom.PlayerCount + " jugador(es).");
-    //}
-
     // Si no se puede unir a la sala al azar
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -106,9 +74,37 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         Debug.Log("Lobby conectado");
     }
 
+    public override void OnCreateRoomFailed(short returnCode, string message) //si la sala existe
+    {
+        Debug.Log("Fallo en crear una nueva sala, seguramente ya existe una sala con ese nombre.");
+        CreateRoom();
+    }
+
+    public override void OnJoinedRoom()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            Debug.Log("Te uniste a la Sala: " + PhotonNetwork.CurrentRoom.Name);
+            Debug.Log("La sala cuenta con: " + PhotonNetwork.CurrentRoom.PlayerCount + " jugador(es).");
+            Debug.Log("INDEX: " + (indexImagenContenedor + 1));
+            PhotonNetwork.LoadLevel((indexImagenContenedor + 1));
+            Debug.Log("Escena creada");
+        }
+    }
+
     #endregion
 
     #region UI Callback Methods
+
+    public void SetNombreDocente()
+    {
+        textNombreDocente.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
+    }
+
+    public void SetNombreEstudiante()
+    {
+        textNombreEstudiante.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
+    }
 
     // Predicate, es un método C# que contiene un set de criterios de búsqueda y devuelve un boolean
     // Está definido en el System namespace 
@@ -121,8 +117,23 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         };
     }
 
+    public void CreateRoom()
+    {
+        Debug.Log("Creando nueva sala: " + roomNameContenedor);
+        RoomOptions roomOptions = new RoomOptions()
+        {
+            IsVisible = true,
+            IsOpen = true,
+            MaxPlayers = (byte)roomSizeContenedor
+        };
+
+        PhotonNetwork.JoinOrCreateRoom(roomNameContenedor, roomOptions, TypedLobby.Default); // Creación de una nueva sala
+
+    }
+
     void BorrarSalasdeLista()
     {
+        Transform contenedorRoom = dalCuenta.isDocente ? contenedorRoomDocente : contenedorRoomEstudiante;
         for (int i = contenedorRoom.childCount - 1; i >= 0; i--)
         {
             Destroy(contenedorRoom.GetChild(i).gameObject);
@@ -133,13 +144,33 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (room.IsOpen && room.IsVisible)
         {
-            //GameObject tempListing = Instantiate(prefabRoomList, contenedorRoom);
-            //RoomSelect tempButton = tempListing.GetComponent<RoomSelect>();
-            //int capacidad = int.Parse(maxSala.text);
-            //tempButton.SetRoom(room.Name, capacidad, room.PlayerCount);
+            Transform contenedorRoom = dalCuenta.isDocente ? contenedorRoomDocente : contenedorRoomEstudiante;
+            GameObject card = Instantiate(prefabRoomList, contenedorRoom);
+            RoomSelect scriptRoomSelect = card.GetComponent<RoomSelect>();
+            scriptRoomSelect.SetRoom(room.Name, room.MaxPlayers, room.PlayerCount, indexImagen);
         }
     }
 
+    public void ContenedorListaCursos()
+    {
+        Transform contenedorRoom = dalCuenta.isDocente ? contenedorRoomDocente : contenedorRoomEstudiante;
+        GameObject card = Instantiate(prefabRoomList, contenedorRoom);
+        RoomSelect scriptRoomSelect = card.GetComponent<RoomSelect>();
+        scriptRoomSelect.SetRoom(inputNombreRoom.text, int.Parse(inputCapacidadRoom.text), 0, indexImagen);
+    }
+
+    public void AddContenedorListaCurso(string nombre, int capacidad, int index)
+    {
+        Transform contenedorRoom = dalCuenta.isDocente ? contenedorRoomDocente : contenedorRoomEstudiante;
+        GameObject card = Instantiate(prefabRoomList, contenedorRoom);
+        RoomSelect scriptRoomSelect = card.GetComponent<RoomSelect>();
+        scriptRoomSelect.SetRoom(nombre, capacidad, 0, index);
+    }
+
     #endregion
+
+    
+
+    
 
 }
