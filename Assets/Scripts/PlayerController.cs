@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Voice.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public static PlayerController sharedInstance;
 
     public PhotonView PV;
-    public FirstPersonController scriptPersonController;
+    public Recorder VoiceRecorder;
 
-    [SerializeField]
-    Camera cameraPlayer;
+    public FirstPersonController scriptPersonController;
+    [SerializeField] Camera cameraPlayer;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         scriptPersonController = GetComponent<FirstPersonController>();
         PV = GetComponent<PhotonView>();
+        VoiceRecorder.TransmitEnabled = false;
     }
 
     // Update is called once per frame
@@ -31,11 +33,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             scriptPersonController.enabled = true;
             cameraPlayer.enabled = true;
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                VoiceRecorder.TransmitEnabled = true;
+            }
         }
         else
         {
             scriptPersonController.enabled = false;
             cameraPlayer.enabled = false;
+            if (Input.GetKeyUp(KeyCode.P))
+            {
+                VoiceRecorder.TransmitEnabled = false;
+            }
+            
         }
     }
 }
