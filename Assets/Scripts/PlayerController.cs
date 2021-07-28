@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public FirstPersonController scriptPersonController;
     [SerializeField] Camera cameraPlayer;
 
+    public FirstPersonController player;
+    public Animator animator;
+
+    Vector3 inputAxis;
+
     private void Awake()
     {
         sharedInstance = this;
@@ -33,7 +38,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             scriptPersonController.enabled = true;
             cameraPlayer.enabled = true;
-            if(Input.GetKeyDown(KeyCode.P))
+
+            inputAxis = player.inputAxis;
+
+            animator.SetFloat("velocityX", inputAxis.x);
+            animator.SetFloat("velocityY", inputAxis.z);
+
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 VoiceRecorder.TransmitEnabled = true;
             }

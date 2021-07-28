@@ -15,6 +15,7 @@ public class HomeManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        
         if (PhotonNetwork.IsConnected)
         {
             Debug.Log("Instancia SI");

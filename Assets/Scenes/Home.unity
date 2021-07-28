@@ -210,6 +210,10 @@ PrefabInstance:
       value: HomeManager
       objectReference: {fileID: 0}
     - target: {fileID: 2046368380148305407, guid: 41f3cd4fd531c5543a2619b49f08bc9f, type: 3}
+      propertyPath: genericPlayer
+      value: 
+      objectReference: {fileID: 448856581025101411, guid: b152caa74219e024b85ca9927b0fe662, type: 3}
+    - target: {fileID: 2046368380148305407, guid: 41f3cd4fd531c5543a2619b49f08bc9f, type: 3}
       propertyPath: spawnPlayer.y
       value: 0.2
       objectReference: {fileID: 0}
