@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -9,8 +10,8 @@ public class dalCuenta : MonoBehaviour
     public static dalCuenta sharedInstance;
     public Cuenta cuenta;
     
-    public InputField inputUser;
-    public InputField inputPassword;
+    public TMP_InputField inputUser;
+    public TMP_InputField inputPassword;
 
     public static bool isDocente;
 
