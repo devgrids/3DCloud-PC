@@ -98,12 +98,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void SetNombreDocente()
     {
-        textNombreDocente.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
+        //textNombreDocente.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
     }
 
     public void SetNombreEstudiante()
     {
-        textNombreEstudiante.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
+        //textNombreEstudiante.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
     }
 
     // Predicate, es un método C# que contiene un set de criterios de búsqueda y devuelve un boolean

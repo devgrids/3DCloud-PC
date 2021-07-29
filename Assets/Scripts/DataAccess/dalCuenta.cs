@@ -103,11 +103,6 @@ public class dalCuenta : MonoBehaviour
                     LobbyManager.sharedInstance.SetNombreEstudiante();
                 }
                 isDocente = this.cuenta.tipoCuenta == 0;
-                LobbyManager.sharedInstance.AddContenedorListaCurso("Home", 5, 0);
-                LobbyManager.sharedInstance.AddContenedorListaCurso("Aula 1", 15, 1);
-                LobbyManager.sharedInstance.AddContenedorListaCurso("Aula 2", 10, 2);
-                LobbyManager.sharedInstance.AddContenedorListaCurso("Biblioteca", 20, 3);
-                LobbyManager.sharedInstance.AddContenedorListaCurso("Comedor", 12, 4);
             }
         }
     }

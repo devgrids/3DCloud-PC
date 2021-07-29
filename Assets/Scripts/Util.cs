@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,28 @@ using UnityEngine.Networking;
 
 public class Util : MonoBehaviour
 {
-    public static string debugNetwork(UnityWebRequest www)
+    public static String debugNetwork(UnityWebRequest www)
     {
         if (!www.isNetworkError && !www.isHttpError)
             return www.downloadHandler.text;
         return "Error";
     }
+
+    public static List<T> getJsonList<T>(string json)
+    {
+        List<T> lista = new List<T>();
+        string[] datos = json.Split('}');
+
+        for (int i = 0; i < datos.Length - 1; i++) 
+        {
+            datos[i] = datos[i].Remove(0, 1);
+            datos[i] = datos[i].Insert(datos[i].Length, "}");
+
+            T obj = JsonUtility.FromJson<T>(datos[i]);
+            lista.Add(obj);
+        }
+
+        return lista;
+    }
+
 }
