@@ -3,7 +3,6 @@ public class Curso
 {
     public int idCurso;
     public int idDocente;
-    public int idEstudiante;
     public string nombre;
     public string descripcion;
     public int capacidad;

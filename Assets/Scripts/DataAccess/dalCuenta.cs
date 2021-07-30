@@ -66,11 +66,11 @@ public class dalCuenta : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("cuenta", jsonCuenta);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost/3dcloud/controllers/cuenta/guardarCuenta.php", form);
+        UnityWebRequest www = UnityWebRequest.Post(Util.BaseUrl + "/3dcloud/controllers/cuenta/guardarCuenta.php", form);
         yield return www.SendWebRequest();
 
         string res = Util.debugNetwork(www);
-        if (res != "Error")
+        if (res != Util.Error)
         {
             Debug.Log(res);
         }
@@ -82,12 +82,12 @@ public class dalCuenta : MonoBehaviour
         form.AddField("email", user);
         form.AddField("password", password);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost/3dcloud/controllers/cuenta/obtenerCuentaPorEmailAndPassword.php", form);
+        UnityWebRequest www = UnityWebRequest.Post(Util.BaseUrl + "/3dcloud/controllers/cuenta/obtenerCuentaPorEmailAndPassword.php", form);
         yield return www.SendWebRequest();
 
         string res = Util.debugNetwork(www);
 
-        if (res != "Error")
+        if (res != Util.Error)
         {
             this.cuenta = JsonUtility.FromJson<Cuenta>(res);
             if (this.cuenta.idCuenta > 0)
@@ -100,6 +100,7 @@ public class dalCuenta : MonoBehaviour
                 else if (this.cuenta.tipoCuenta == 1)
                 {
                     GameManager.sharedInstance.SetGameState(GameState.lobbyEstudiante);
+                    dalEstudiante.sharedInstance.obtenerEstudiante(this.cuenta.idCuenta);
                     LobbyManager.sharedInstance.SetNombreEstudiante();
                 }
                 isDocente = this.cuenta.tipoCuenta == 0;

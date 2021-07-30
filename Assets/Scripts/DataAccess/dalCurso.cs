@@ -48,13 +48,12 @@ public class dalCurso : MonoBehaviour
 
     public IEnumerator IE_obtenerListaDeCursos()
     {
-
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost/3dcloud/controllers/curso/obtenerListaCursos.php");
+        UnityWebRequest www = UnityWebRequest.Get(Util.BaseUrl + "/3dcloud/controllers/curso/obtenerListaCursos.php");
         yield return www.SendWebRequest();
 
         String res = Util.debugNetwork(www);
 
-        if (res != "Error")
+        if (res != Util.Error)
         {
             this.listaDeCursos = Util.getJsonList<Curso>(res);
             foreach(var curso in listaDeCursos)

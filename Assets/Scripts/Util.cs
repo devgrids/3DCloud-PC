@@ -6,11 +6,14 @@ using UnityEngine.Networking;
 
 public class Util : MonoBehaviour
 {
+    public const string BaseUrl = "http://localhost";
+    public const string Error = "*$";
+
     public static String debugNetwork(UnityWebRequest www)
     {
         if (!www.isNetworkError && !www.isHttpError)
             return www.downloadHandler.text;
-        return "Error";
+        return Error;
     }
 
     public static List<T> getJsonList<T>(string json)
