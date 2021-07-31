@@ -15,19 +15,14 @@ public class HomeManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        
         if (PhotonNetwork.IsConnected)
         {
-            Debug.Log("Instancia SI");
             if (genericPlayer != null)
             {
                 // Instanciar al jugador para todos los jugadores en la sala en una posición al azar al inicio de la escena
                 PhotonNetwork.Instantiate(genericPlayer.name, spawnPlayer, Quaternion.identity);
             }
         }
-        else
-
-            Debug.Log("Instancia NO");
     }
 
     void Update()
@@ -43,6 +38,11 @@ public class HomeManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //PhotonNetwork.PlayerList;
+    }
+
+    public void debugGUI()
+    {
+        Debug.Log("Evento Debug Activado");
     }
 
 }

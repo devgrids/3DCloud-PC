@@ -57,9 +57,7 @@ public class GameManager : MonoBehaviour
         this.currentGameState = newGameState;
     }
 
-    public void DebugLista()
-    {
-        Debug.Log("LISTA");
-    }
+   
+     
 
 }

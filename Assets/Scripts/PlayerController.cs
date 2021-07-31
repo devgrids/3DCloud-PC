@@ -1,8 +1,7 @@
 using Photon.Pun;
 using Photon.Voice.Unity;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -48,6 +47,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 VoiceRecorder.TransmitEnabled = true;
             }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Debug.Log("Eres el profesor");
+            }
+
         }
         else
         {
@@ -59,5 +64,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             
         }
+
+        
     }
+
+    private void FixedUpdate()
+    {
+        
+    }
+
+    //void OnGUI()
+    //{
+    //    Debug.Log("gui evento");
+    //    GUI.Label(new Rect(new Vector2(20, 20), new Vector2(2,2)), "Game Over");
+    //}
+
 }

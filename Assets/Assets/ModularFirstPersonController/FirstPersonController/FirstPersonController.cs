@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -359,6 +360,30 @@ public class FirstPersonController : MonoBehaviour
         if(enableHeadBob)
         {
             HeadBob();
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            int layerMask = 1 << 5;
+
+            //layerMask = ~layerMask;
+
+            RaycastHit hit;
+
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward), out hit, 10, layerMask))
+            {
+                Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.green);
+                //Debug.Log("Distance: " + hit.distance);
+                //Debug.Log(hit.transform.gameObject.name);
+
+                GameObject obj = hit.transform.gameObject;
+
+                IPointerClickHandler clickHandler = obj.GetComponent<IPointerClickHandler>();
+                //IPointerEnterHandler enterHandler = obj.GetComponent<IPointerEnterHandler>();
+                PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+                clickHandler.OnPointerClick(pointerEventData);
+                //enterHandler.OnPointerEnter(pointerEventData);
+            }
         }
     }
 
