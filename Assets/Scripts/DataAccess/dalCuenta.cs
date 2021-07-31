@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -61,7 +62,7 @@ public class dalCuenta : MonoBehaviour
 
     #region IEnumerator Callback Methods
 
-    IEnumerator IE_guardarCuenta(string jsonCuenta)
+    private IEnumerator IE_guardarCuenta(string jsonCuenta)
     {
         WWWForm form = new WWWForm();
         form.AddField("cuenta", jsonCuenta);
@@ -76,7 +77,7 @@ public class dalCuenta : MonoBehaviour
         }
     }
 
-    public IEnumerator IE_obtenerCuenta(string user, string password)
+    private IEnumerator IE_obtenerCuenta(string user, string password)
     {
         WWWForm form = new WWWForm();
         form.AddField("email", user);
@@ -95,13 +96,11 @@ public class dalCuenta : MonoBehaviour
                 if (this.cuenta.tipoCuenta == 0)
                 {
                     GameManager.sharedInstance.SetGameState(GameState.lobbyDocente);
-                    LobbyManager.sharedInstance.SetNombreDocente();
                 }
                 else if (this.cuenta.tipoCuenta == 1)
                 {
                     GameManager.sharedInstance.SetGameState(GameState.lobbyEstudiante);
                     dalEstudiante.sharedInstance.obtenerEstudiante(this.cuenta.idCuenta);
-                    LobbyManager.sharedInstance.SetNombreEstudiante();
                 }
                 isDocente = this.cuenta.tipoCuenta == 0;
             }
@@ -109,4 +108,6 @@ public class dalCuenta : MonoBehaviour
     }
 
     #endregion
+
+   
 }

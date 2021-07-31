@@ -10,9 +10,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public static LobbyManager sharedInstance;
 
-    [SerializeField] Text textNombreDocente;
-    [SerializeField] Text textNombreEstudiante;
-
     [SerializeField] Transform contenedorRoomDocente;
     [SerializeField] Transform contenedorRoomEstudiante;
 
@@ -95,16 +92,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region UI Callback Methods
-
-    public void SetNombreDocente()
-    {
-        //textNombreDocente.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
-    }
-
-    public void SetNombreEstudiante()
-    {
-        //textNombreEstudiante.text = dalCuenta.sharedInstance.cuenta.nombres + " " + dalCuenta.sharedInstance.cuenta.apellidos;
-    }
 
     // Predicate, es un método C# que contiene un set de criterios de búsqueda y devuelve un boolean
     // Está definido en el System namespace 

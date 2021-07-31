@@ -53,7 +53,7 @@ public class dalEstudiante : MonoBehaviour
         if (res != Util.Error)
         {
             this.estudiante = JsonUtility.FromJson<Estudiante>(res);
-            Debug.Log(res);
+            dalCurso.sharedInstance.obtenerListaDeCursos(this.estudiante.idEstudiante);
         }
     }
 

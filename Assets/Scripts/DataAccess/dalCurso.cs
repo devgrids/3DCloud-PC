@@ -40,6 +40,11 @@ public class dalCurso : MonoBehaviour
         StartCoroutine(IE_obtenerListaDeCursos());
     }
 
+    public void obtenerListaDeCursos(int idEstudiante)
+    {
+        StartCoroutine(IE_obtenerListaDeCursos(idEstudiante));
+    }
+
     #endregion
 
     #region IEnumerator Callback Methods
@@ -60,6 +65,27 @@ public class dalCurso : MonoBehaviour
             {
                 LobbyManager.sharedInstance.AddContenedorListaCurso(curso.nombre, curso.capacidad, curso.imagen);
             }    
+        }
+    }
+
+    public IEnumerator IE_obtenerListaDeCursos(int idEstudiante)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("idEstudiante", idEstudiante);
+
+        UnityWebRequest www = UnityWebRequest.Post(Util.BaseUrl + "/3dcloud/controllers/curso/obtenerListaDeCursosPorIdEstudiante.php", form);
+        yield return www.SendWebRequest();
+
+        String res = Util.debugNetwork(www);
+
+        if (res != Util.Error)
+        {
+            this.listaDeCursos = Util.getJsonList<Curso>(res);
+            foreach (var curso in listaDeCursos)
+            {
+                LobbyManager.sharedInstance.AddContenedorListaCurso(curso.nombre, curso.capacidad, curso.imagen);
+            }
+            LobbyEstudianteManager.sharedInstance.SetAttributesGUI();
         }
     }
 
