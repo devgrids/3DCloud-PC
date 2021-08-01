@@ -37,42 +37,24 @@ public class ClassContent : MonoBehaviour
 		public string answerFalse03;
 	}
 
-	[Header("Gameplay")]
-	public int actualQuestion = 0;
-	public int totalQuestions = 0;
-	public int asnwerTrueId = 0;
-	public int asnwerCorrect = 0;
-	public int asnwerIncorrect = 0;
+	[Serializable]
+	public class Content
+	{
+		public string name;
+		public string description;
+	}
 
-	[Header("Questions")]
-	[Range(0f, 5f)] public float timeToSelect = 3;
-	public TextMeshProUGUI txtTitle;
-	[Space]
-	public Image[] imgAnswers;
-	[Space]
-	public List<TextMeshProUGUI> txtAnswers;
-	[Space]
-	public Color colorEnter;
-	public Color colorExit;
-	public Color colorTrue;
-	public Color colorFalse;
+	public TMP_Text textNameContent;
+	public TMP_Text textDescriptionContent;
 
-	[Header("Next Question")]
-	public bool isChanging = false;
-	[Range(0f, 5f)] public float timeToChange = 3;
-	[Space]
-	public PlayableAsset playableShowOn;
-	public PlayableAsset playableNext;
-	public PlayableAsset playableShowOff;
+	private int index = 0;
+	private int contentCount;
 
 	[Header("JSON")]
 	public string fileName = "Questions";
 	public Questions[] questions;
+	public Content[] contents;
 	private string fileFormat = ".json";
-
-	PlayableDirector playableDirector;
-	List<string> answers;
-	List<TextMeshProUGUI> texts;
 
 	private void Awake()
 	{
@@ -84,10 +66,6 @@ public class ClassContent : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
-
-		playableDirector = GetComponent<PlayableDirector>();
-		answers = new List<string>();
-		texts = new List<TextMeshProUGUI>();
 	}
 
 	private void Start()
@@ -95,57 +73,12 @@ public class ClassContent : MonoBehaviour
 		StartCoroutine(LoadJsonData());
 	}
 
-	public void CheckQuestion(int id)
-	{
-		isChanging = true;
-
-		// Seteo los colores de Verdadero o Falso
-		for (int i = 0; i < imgAnswers.Length; i++)
-			imgAnswers[i].color = i == asnwerTrueId ? colorTrue : colorFalse;
-
-		// Agrego puntos
-		if (asnwerTrueId == id)
-			asnwerCorrect++;
-		else
-			asnwerIncorrect++;
-
-		Invoke("NextQuestion", timeToChange);
-	}
-
-	public void NextQuestion()
-	{
-		playableDirector.playableAsset = playableNext;
-		playableDirector.Play(); ;
-	}
-
-	public void ShowQuestion(bool isShowing)
-	{
-		playableDirector.playableAsset = isShowing ? playableShowOn : playableShowOff;
-		playableDirector.Play(); ;
-	}
-
-	private void FinishGame()
-	{
-		for (int i = 0; i < imgAnswers.Length; i++)
-			imgAnswers[i].GetComponent<BoxCollider>().enabled = false;
-
-		txtTitle.text = "Results";
-
-		imgAnswers[0].color = colorTrue;
-		txtAnswers[0].text = asnwerCorrect.ToString();
-
-		txtAnswers[1].text = "-";
-
-		imgAnswers[2].color = colorFalse;
-		txtAnswers[2].text = asnwerIncorrect.ToString();
-	}
-
 	#region JSON ------------------------------------
 
 	IEnumerator LoadJsonData()
 	{
 
-#if UNITY_EDITOR
+#if UNITY_STANDALONE_WIN
 		string filePath = Path.Combine(Application.streamingAssetsPath, fileName + fileFormat);
 		LoadData(filePath);
 
@@ -183,12 +116,13 @@ public class ClassContent : MonoBehaviour
 		if (File.Exists(_filePath))
 		{
 			string fileJson = File.ReadAllText(_filePath);
+			contents = Util.FromJsonArray<Content>(fileJson);
+			contentCount = contents.Length;
+			//questions = Util.FromJsonArray<Questions>(fileJson);
 
-			questions = Util.FromJsonArray<Questions>(fileJson);
-			totalQuestions = questions.Length - 1;
+			textNameContent.text = contents[index].name;
+			textDescriptionContent.text = contents[index].description;
 
-			ChangeQuestions();
-			ShowQuestion(true);
 		}
 		else
 		{
@@ -198,56 +132,14 @@ public class ClassContent : MonoBehaviour
 
 	#endregion ----------------------------------
 
-	#region Timeline ----------------------------
+	public void NextContent()
+    {
+		index++;
+		if (contentCount <= index) index = 0;
 
-	public void SetChange(bool _isChanging)
-	{
-		isChanging = _isChanging;
+		textNameContent.text = contents[index].name;
+		textDescriptionContent.text = contents[index].description;
+
 	}
-
-	public void ChangeQuestions()
-	{
-		// Reseteo de color
-		for (int i = 0; i < imgAnswers.Length; i++)
-			imgAnswers[i].color = colorExit;
-
-		// Termina el juego si se terminan las preguntas
-		if (actualQuestion == questions.Length)
-		{
-			FinishGame();
-			return;
-		}
-
-		// Seteamos la pregunta principal
-		txtTitle.text = questions[actualQuestion].question;
-
-		// Se agrega contenido a las listas temporales
-		texts.AddRange(txtAnswers);
-		answers.Add(questions[actualQuestion].answerFalse01);
-		answers.Add(questions[actualQuestion].answerFalse02);
-		answers.Add(questions[actualQuestion].answerFalse03);
-
-		// Random para Pregunta Correcta
-		int r = UnityEngine.Random.Range(0, texts.Count);
-
-		asnwerTrueId = r;
-		texts[r].text = questions[actualQuestion].answerTrue;
-		texts.Remove(texts[r]);
-
-		// Random para Preguntas Falsas
-		for (int i = 0; i < texts.Count; i++)
-		{
-			r = UnityEngine.Random.Range(0, answers.Count);
-			texts[i].text = answers[r];
-			answers.Remove(answers[r]);
-		}
-
-		actualQuestion++;
-
-		// Se limpian todas las listas
-		answers.Clear();
-		texts.Clear();
-	}
-
-	#endregion ----------------------------------
+	
 }

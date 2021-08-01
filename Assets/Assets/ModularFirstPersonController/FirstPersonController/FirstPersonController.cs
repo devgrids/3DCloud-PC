@@ -378,11 +378,15 @@ public class FirstPersonController : MonoBehaviour
 
                 GameObject obj = hit.transform.gameObject;
 
-                IPointerClickHandler clickHandler = obj.GetComponent<IPointerClickHandler>();
-                //IPointerEnterHandler enterHandler = obj.GetComponent<IPointerEnterHandler>();
                 PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+
+                IPointerClickHandler clickHandler = obj.GetComponent<IPointerClickHandler>();
+                IPointerEnterHandler enterHandler = obj.GetComponent<IPointerEnterHandler>();
+                IPointerExitHandler exitHandler = obj.GetComponent<IPointerExitHandler>();
+
                 clickHandler.OnPointerClick(pointerEventData);
-                //enterHandler.OnPointerEnter(pointerEventData);
+                enterHandler.OnPointerEnter(pointerEventData);
+                exitHandler.OnPointerExit(pointerEventData);
             }
         }
     }
