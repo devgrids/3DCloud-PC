@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             if (PhotonNetwork.IsMasterClient)
             {
-                Debug.Log("Eres el profesor");
+                //Debug.Log("Eres el profesor");
             }
 
         }
@@ -71,6 +71,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private void FixedUpdate()
     {
         
+    }
+
+   
+    public void NextContent()
+    {
+        //NextContentPun();
+        //PV.RPC("NextContentPun", RpcTarget.AllBufferedViaServer);
     }
 
     //void OnGUI()

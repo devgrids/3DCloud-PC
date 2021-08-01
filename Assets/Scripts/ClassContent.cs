@@ -1,30 +1,14 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.UI;
+using Photon.Pun;
 
 public class ClassContent : MonoBehaviour
 {
-	#region Singleton
 
-	private static ClassContent instance;
-	public static ClassContent Instance
-	{
-		get
-		{
-			if (instance == null)
-			{
-				instance = new ClassContent();
-			}
-			return instance;
-		}
-	}
-
-	#endregion
+	public static ClassContent sharedInstance;
 
 	[Serializable]
 	public class Questions
@@ -58,14 +42,7 @@ public class ClassContent : MonoBehaviour
 
 	private void Awake()
 	{
-		if (instance == null)
-		{
-			instance = this;
-		}
-		else
-		{
-			Destroy(gameObject);
-		}
+		sharedInstance = this;
 	}
 
 	private void Start()
@@ -141,5 +118,7 @@ public class ClassContent : MonoBehaviour
 		textDescriptionContent.text = contents[index].description;
 
 	}
+
+	
 	
 }

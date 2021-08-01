@@ -38,6 +38,15 @@ public class HomeManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //PhotonNetwork.PlayerList;
+        Debug.Log("Se ha unido un jugador");
+        //listaDeJugadores.
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++) 
+        {
+            Debug.Log(PhotonNetwork.PlayerList[i].IsMasterClient);
+        }
+
+        Debug.Log("Cantidad: " + PhotonNetwork.PlayerList.Length);
+        
     }
 
     public void debugGUI()

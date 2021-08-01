@@ -4,6 +4,7 @@
 //
 // "Enable/Disable Headbob, Changed look rotations - should result in reduced camera jitters" || version 1.0.1
 
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -150,7 +151,7 @@ public class FirstPersonController : MonoBehaviour
 
     void Start()
     {
-        if(lockCursor)
+        if (lockCursor)
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -378,6 +379,15 @@ public class FirstPersonController : MonoBehaviour
 
                 GameObject obj = hit.transform.gameObject;
 
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+                for (int i = 0; i < players.Length; i++)
+                {
+                    players[i].GetComponent<PhotonView>().RPC("Scale", RpcTarget.AllBufferedViaServer);
+                    Debug.Log(i + "-" + players[i].name);
+                }
+
+
                 PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
 
                 IPointerClickHandler clickHandler = obj.GetComponent<IPointerClickHandler>();
@@ -390,6 +400,14 @@ public class FirstPersonController : MonoBehaviour
             }
         }
     }
+
+    [PunRPC]
+    public void Scale()
+    {
+        Debug.Log("Ejecutando RPC");
+        ClassContent.sharedInstance.NextContent();
+    }
+
 
     void FixedUpdate()
     {
