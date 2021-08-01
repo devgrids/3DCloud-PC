@@ -109,6 +109,9 @@ public class ClassContent : MonoBehaviour
 
 	#endregion ----------------------------------
 
+	
+	
+
 	public void NextContent()
     {
 		index++;
@@ -116,7 +119,6 @@ public class ClassContent : MonoBehaviour
 
 		textNameContent.text = contents[index].name;
 		textDescriptionContent.text = contents[index].description;
-
 	}
 
 	

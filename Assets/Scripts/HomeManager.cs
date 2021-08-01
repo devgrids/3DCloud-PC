@@ -11,6 +11,9 @@ public class HomeManager : MonoBehaviourPunCallbacks
     GameObject genericPlayer;
 
     [SerializeField]
+    GameObject cube;
+
+    [SerializeField]
     Vector3 spawnPlayer;
 
     void Start()
@@ -23,6 +26,11 @@ public class HomeManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.Instantiate(genericPlayer.name, spawnPlayer, Quaternion.identity);
             }
         }
+
+        //if (!PhotonNetwork.IsMasterClient)
+        //{
+        //    PhotonNetwork.Instantiate(cube.name, spawnPlayer + new Vector3(2, 0, 2), Quaternion.identity);
+        //}
     }
 
     void Update()
@@ -46,7 +54,11 @@ public class HomeManager : MonoBehaviourPunCallbacks
         }
 
         Debug.Log("Cantidad: " + PhotonNetwork.PlayerList.Length);
-        
+
+        //PhotonNetwork.
+
+        //Actualizarse al jugador p :v
+
     }
 
     public void debugGUI()

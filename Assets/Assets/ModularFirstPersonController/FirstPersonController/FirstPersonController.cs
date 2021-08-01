@@ -15,6 +15,7 @@ using UnityEngine.UI;
 public class FirstPersonController : MonoBehaviour
 {
     private Rigidbody rb;
+    private GameObject objTemp;
 
     #region Camera Movement Variables
 
@@ -371,43 +372,53 @@ public class FirstPersonController : MonoBehaviour
 
             RaycastHit hit;
 
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward), out hit, 10, layerMask))
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward), out hit, 20.0f, layerMask))
             {
-                Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.green);
-                //Debug.Log("Distance: " + hit.distance);
-                //Debug.Log(hit.transform.gameObject.name);
+                //Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.green);
 
-                GameObject obj = hit.transform.gameObject;
 
-                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                this.objTemp = hit.transform.gameObject;
 
-                for (int i = 0; i < players.Length; i++)
+                if (objTemp.CompareTag("Money")) 
                 {
-                    players[i].GetComponent<PhotonView>().RPC("Scale", RpcTarget.AllBufferedViaServer);
-                    Debug.Log(i + "-" + players[i].name);
+
+                    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+                    for (int i = 0; i < players.Length; i++)
+                    {
+                        players[i].GetComponent<PhotonView>().RPC("Destruir", RpcTarget.AllBufferedViaServer, objTemp.name);
+                    }
+
+                    //PhotonNetwork.Destroy(obj);
+                    //obj.GetComponent<PhotonView>().RPC("Destruir", RpcTarget.AllBufferedViaServer);
+                }
+                else
+                {
+                    PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+
+                    IPointerClickHandler clickHandler = objTemp.GetComponent<IPointerClickHandler>();
+                    IPointerEnterHandler enterHandler = objTemp.GetComponent<IPointerEnterHandler>();
+                    IPointerExitHandler exitHandler = objTemp.GetComponent<IPointerExitHandler>();
+
+                    clickHandler.OnPointerClick(pointerEventData);
+                    enterHandler.OnPointerEnter(pointerEventData);
+                    exitHandler.OnPointerExit(pointerEventData);
                 }
 
-
-                PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-
-                IPointerClickHandler clickHandler = obj.GetComponent<IPointerClickHandler>();
-                IPointerEnterHandler enterHandler = obj.GetComponent<IPointerEnterHandler>();
-                IPointerExitHandler exitHandler = obj.GetComponent<IPointerExitHandler>();
-
-                clickHandler.OnPointerClick(pointerEventData);
-                enterHandler.OnPointerEnter(pointerEventData);
-                exitHandler.OnPointerExit(pointerEventData);
+               
             }
         }
     }
 
     [PunRPC]
-    public void Scale()
+    public void Destruir(string name)
     {
-        Debug.Log("Ejecutando RPC");
-        ClassContent.sharedInstance.NextContent();
-    }
+        Debug.Log("Destruyendo money: " + name);
 
+        //Destroy(objTemp);
+        Destroy(GameObject.Find(name));
+        //Destroy(obj);
+    }
 
     void FixedUpdate()
     {

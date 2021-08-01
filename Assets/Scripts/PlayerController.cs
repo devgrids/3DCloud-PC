@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         sharedInstance = this;
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         scriptPersonController = GetComponent<FirstPersonController>();
@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         VoiceRecorder.TransmitEnabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (PV.IsMine)
@@ -62,10 +61,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 VoiceRecorder.TransmitEnabled = false;
             }
-            
         }
-
-        
     }
 
     private void FixedUpdate()
@@ -73,12 +69,23 @@ public class PlayerController : MonoBehaviourPunCallbacks
         
     }
 
-   
     public void NextContent()
     {
-        //NextContentPun();
-        //PV.RPC("NextContentPun", RpcTarget.AllBufferedViaServer);
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<PhotonView>().RPC("NextContentPun", RpcTarget.AllBufferedViaServer);
+        }
     }
+
+    [PunRPC]
+    public void NextContentPun()
+    {
+        ClassContent.sharedInstance.NextContent();
+    }
+
+    
 
     //void OnGUI()
     //{
