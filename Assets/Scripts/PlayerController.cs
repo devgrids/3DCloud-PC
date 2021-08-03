@@ -71,6 +71,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public void NextContent()
     {
+        if (!PhotonNetwork.IsMasterClient) return;
+
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
         for (int i = 0; i < players.Length; i++)
@@ -82,10 +84,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void NextContentPun()
     {
-        ClassContent.sharedInstance.NextContent();
+         ClassContent.sharedInstance.NextContent();
     }
 
-    
 
     //void OnGUI()
     //{

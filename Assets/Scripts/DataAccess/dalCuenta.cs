@@ -99,8 +99,8 @@ public class dalCuenta : MonoBehaviour
                 }
                 else if (this.cuenta.tipoCuenta == 1)
                 {
-                    GameManager.sharedInstance.SetGameState(GameState.lobbyEstudiante);
                     dalEstudiante.sharedInstance.obtenerEstudiante(this.cuenta.idCuenta);
+                    
                 }
                 isDocente = this.cuenta.tipoCuenta == 0;
             }

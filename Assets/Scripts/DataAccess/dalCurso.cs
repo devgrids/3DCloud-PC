@@ -81,6 +81,7 @@ public class dalCurso : MonoBehaviour
         if (res != Util.Error)
         {
             this.listaDeCursos = Util.getJsonList<Curso>(res);
+            GameManager.sharedInstance.SetGameState(GameState.lobbyEstudiante);
             foreach (var curso in listaDeCursos)
             {
                 LobbyManager.sharedInstance.AddContenedorListaCurso(curso.nombre, curso.capacidad, curso.imagen);

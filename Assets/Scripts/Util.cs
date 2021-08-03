@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public class Util : MonoBehaviour
 {
-    public const string BaseUrl = "http://localhost";
+    public const string BaseUrl = "https://leonidas-mv.com";
     public const string Error = "*$";
 
     public static String debugNetwork(UnityWebRequest www)
