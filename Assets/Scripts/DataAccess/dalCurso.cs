@@ -56,11 +56,11 @@ public class dalCurso : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Get(Util.BaseUrl + "/3dcloud/controllers/curso/obtenerListaCursos.php");
         yield return www.SendWebRequest();
 
-        String res = Util.debugNetwork(www);
+        String res = Util.DebugNetwork(www);
 
         if (res != Util.Error)
         {
-            this.listaDeCursos = Util.getJsonList<Curso>(res);
+            this.listaDeCursos = Util.GetJsonList<Curso>(res);
             foreach(var curso in listaDeCursos)
             {
                 LobbyManager.sharedInstance.AddContenedorListaCurso(curso.nombre, curso.capacidad, curso.imagen);
@@ -76,11 +76,11 @@ public class dalCurso : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post(Util.BaseUrl + "/3dcloud/controllers/curso/obtenerListaDeCursosPorIdEstudiante.php", form);
         yield return www.SendWebRequest();
 
-        String res = Util.debugNetwork(www);
+        String res = Util.DebugNetwork(www);
 
         if (res != Util.Error)
         {
-            this.listaDeCursos = Util.getJsonList<Curso>(res);
+            this.listaDeCursos = Util.GetJsonList<Curso>(res);
             GameManager.sharedInstance.SetGameState(GameState.lobbyEstudiante);
             foreach (var curso in listaDeCursos)
             {

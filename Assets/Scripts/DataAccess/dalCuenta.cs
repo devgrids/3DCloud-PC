@@ -45,7 +45,7 @@ public class dalCuenta : MonoBehaviour
         obj.password = "cloud";
         obj.telefono = "987456123";
         obj.tipoCuenta = 0;
-        obj.apellidos = "Moreno Vásquez";
+        obj.apellidos = "Moreno VÃ¡squez";
         obj.domicilio = "Barcelona";
         obj.email = "piero.jmv.2001@gmail.com";
 
@@ -70,7 +70,7 @@ public class dalCuenta : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post(Util.BaseUrl + "/3dcloud/controllers/cuenta/guardarCuenta.php", form);
         yield return www.SendWebRequest();
 
-        string res = Util.debugNetwork(www);
+        string res = Util.DebugNetwork(www);
         if (res != Util.Error)
         {
             Debug.Log(res);
@@ -86,7 +86,7 @@ public class dalCuenta : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post(Util.BaseUrl + "/3dcloud/controllers/cuenta/obtenerCuentaPorEmailAndPassword.php", form);
         yield return www.SendWebRequest();
 
-        string res = Util.debugNetwork(www);
+        string res = Util.DebugNetwork(www);
 
         if (res != Util.Error)
         {
