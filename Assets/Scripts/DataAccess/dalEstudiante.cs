@@ -48,7 +48,7 @@ public class dalEstudiante : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post(Util.BaseUrl + "/3dcloud/controllers/estudiante/obtenerEstudiantePorIdCuenta.php", form);
         yield return www.SendWebRequest();
 
-        string res = Util.DebugNetwork(www);
+        string res = Util.debugNetwork(www);
 
         if (res != Util.Error)
         {

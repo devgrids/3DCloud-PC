@@ -22,7 +22,7 @@ public class HomeManager : MonoBehaviourPunCallbacks
         {
             if (genericPlayer != null)
             {
-                // Instanciar al jugador para todos los jugadores en la sala en una posiciÃ³n al azar al inicio de la escena
+                // Instanciar al jugador para todos los jugadores en la sala en una posición al azar al inicio de la escena
                 PhotonNetwork.Instantiate(genericPlayer.name, spawnPlayer, Quaternion.identity);
             }
         }
@@ -43,7 +43,7 @@ public class HomeManager : MonoBehaviourPunCallbacks
         
     }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //PhotonNetwork.PlayerList;
         Debug.Log("Se ha unido un jugador");

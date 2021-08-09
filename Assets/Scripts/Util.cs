@@ -9,14 +9,14 @@ public class Util : MonoBehaviour
     public const string BaseUrl = "https://leonidas-mv.com";
     public const string Error = "*$";
 
-    public static String DebugNetwork(UnityWebRequest www)
+    public static String debugNetwork(UnityWebRequest www)
     {
         if (!www.isNetworkError && !www.isHttpError)
             return www.downloadHandler.text;
         return Error;
     }
 
-    public static List<T> GetJsonList<T>(string json)
+    public static List<T> getJsonList<T>(string json)
     {
         List<T> lista = new List<T>();
         string[] datos = json.Split('}');
@@ -44,14 +44,6 @@ public class Util : MonoBehaviour
     private class Wrapper<T>
     {
         public T[] array;
-    }
-    
-    public static bool CheckGround(Transform transform, float distance)
-    {
-        Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f),
-            transform.position.z);
-        
-        return Physics.Raycast(origin, transform.TransformDirection(Vector3.down), out RaycastHit hit, distance);
     }
 
 }
